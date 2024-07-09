@@ -4,7 +4,7 @@ const connectDb = require("./database/databaseConnection")
 const blogCreateModel = require("./model/blogModel")
 const {multer,storage} = require("./middleware/multerConfig")
 const blogModel = require("./model/blogModel")
-const upload = multer({storage:storage})
+const upload = multer({storage:storage}) // Initialize multer with the defined storage
 
 
 app.use(express.json())
@@ -25,7 +25,7 @@ app.post("/blog",upload.single('image'), async (req,res)=>{
     console.log("Blog Created")
     try{
         await blogCreateModel.create({
-        title,
+        title:title,
         subtitle,
         image: filename
     })
@@ -50,8 +50,6 @@ app.get("/", async (req,res)=>{
     res.render("homepage.ejs",{blogs})
 })
 
-// app.get("/homepage", (req,res)=>{
-//     res.render("homepage.ejs")
-// })
 
-app.use(express.static("./storage"))
+
+app.use(express.static("./storage")) // The line app.use(express.static("./storage")) configures the Express application to serve static files from the storage directory. This makes it easy to deliver static assets like images, CSS files, and HTML files to the client.
