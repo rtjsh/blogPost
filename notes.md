@@ -59,9 +59,23 @@ Database query
 File read
 
 
-middleware => We are using it for file handling and image handling
+middleware => Middleware in JavaScript, particularly in the context of web development, is a piece of code that sits between the server and the application logic, intercepting and handling requests and responses. Middleware functions can be used for various purposes such as authentication, logging, error handling, and more. They are a key part of frameworks like Express.js.
 
 multer => Multer is a node.js middleware for handling multipart/form-data, which is primarily used for uploading files.
 
+
+In Node.js, particularly when using the Express framework, HTTP methods like GET and POST are used to define routes and handle HTTP requests. Here's a detailed explanation and examples of how to use these methods and some others:
+1) The GET method is used to request data from a specified resource. It is one of the most common HTTP methods.(e.g., search queries).
+2) The POST method is used to send data to the server to create or update a resource. The data sent to the server with POST is stored in the request body. (e.g., submitting a form to create a new blog post)
+3) The PUT method is used to update an existing resource. It is similar to POST but is typically used to update existing resources.
+4) The DELETE method is used to delete a specified resource.
+5) The PATCH method is used to apply partial modifications to a resource.
+
+Routing --> Routing is a way to define endpoints (routes) for your application and specify what should happen when a particular route is requested
+
+Multipurpose Internet Mail Extensions --> MIME types play a crucial role in web development, helping to define the nature and format of data being transferred or processed. Whether you're restricting file inputs, setting headers for HTTP requests, handling file uploads on the server, or determining the MIME type of files in the browser, understanding and working with MIME types is essential for building robust web applications.
+
 fetch/get
+
+
 
