@@ -78,4 +78,9 @@ Multipurpose Internet Mail Extensions --> MIME types play a crucial role in web 
 fetch/get
 
 
+hashing and encryption
 
+Token, Cookie, Session
+
+JWT
+Cryptography
