@@ -1,3 +1,4 @@
+require("dotenv").config()
 const express = require("express")
 const app = express()
 // const connectDb = require("./database/databaseConnection") // can take different variablename 
@@ -8,7 +9,12 @@ const bcrypt = require("bcrypt")
 const {multer,storage} = require("./middleware/multerConfig")
 const blogModel = require("./model/blogModel")
 const upload = multer({storage:storage}) // Initialize multer with the defined storage since storage and multer are interconnected
+const jwt = require("jsonwebtoken")
+const cookieParser = require('cookie-parser')
+const Authenticated = require("./middleware/isAuthenticated")
 
+
+app.use(cookieParser())
 app.use(express.json()) // Middleware to handle JSON bodies
 app.use(express.urlencoded({extended: true})) // Middleware to handle URL-encoded bodies
 
@@ -16,25 +22,67 @@ app.set("view engine","ejs")
 
 console.log(typeof blogModel);
 
-app.get("/blog", (req,res)=>{
+app.get("/blog",Authenticated,(req,res)=>{
+    console.log((req.userId));
     res.render("blog.ejs")
     
 })
 
+// This renders "Register.ejs" template in web server with "/Register" given as a route
 app.get("/Register", async(req,res)=>{
-    // const username = await blogModel
     res.render("Register.ejs")
+})
+
+app.post("/Register", async (req,res)=>{
+
+    
+    const {email,username,password} = req.body
+    // console.log(email,username,password);
+    // console.log("Blog Created")
+    try{
+        await registerModel.create({
+        email:email,
+        username: username,
+        password: bcrypt.hashSync(password,10) // Hashing the password
+
+    })
+    res.send("Post hitted")
+}
+    catch (error) {
+
+        console.log("Error detected");
+     }
     
 })
 
 app.get("/Login", async(req,res)=>{
-    // const username = await blogModel
     res.render("Login.ejs")
     
 })
 
+app.post("/Login", async(req,res)=>{
+    const{email,password}= req.body
+    const user = await registerModel.find({email : email}) // Returns value in array format
 
-
+    if(user.length === 0)
+    {
+        res.send("Invalid email")
+    }
+    else{
+        const isMatched = bcrypt.compareSync(password,user[0].password) // encrypting the password "user[0].password"
+        if(!isMatched)
+        {
+            res.send("Invalid password")
+        }
+        else{
+           const token = jwt.sign({userId : user[0]._id},process.env.SECRET,{
+                expiresIn : '20d'
+            })
+            res.cookie("token",token)
+            res.send("Logged in successfully")
+        }
+    }
+})
 
 // connectDb()
 
@@ -59,54 +107,10 @@ app.post("/blog",upload.single('image'), async (req,res)=>{
     
 })
 
-app.post("/Register", async (req,res)=>{
-
-    
-    const {email,username,password} = req.body
-    // console.log(email,username,password);
-    // console.log("Blog Created")
-    try{
-        await registerModel.create({
-        email:email,
-        username: username,
-        password: bcrypt.hashSync(password,10)
-
-    })
-    res.send("Post hitted")
-}
-    catch (error) {
-
-        console.log("Error detected");
-     }
-    
-})
-
-app.post("/Login", async(req,res)=>{
-    const{email,password}= req.body
-    const user = await registerModel.find({email : email}) // Returns value in array format
-
-    if(user.length === 0)
-    {
-        res.send("Invalid email")
-    }
-    else{
-        const isMatched = bcrypt.compareSync(password,user[0].password)
-        if(!isMatched)
-        {
-            res.send("Invalid password")
-        }
-        else{
-            res.send("Logged in successfully")
-        }
-    }
-
-
-})
 
 
 
-
-app.get("/", async (req,res)=>{
+app.get("/", Authenticated, async (req,res)=>{
     const blogs = await blogModel.find() // returns all data from database in array format 
     if(blogs.length === 0){
         res.send("No blogs")
@@ -115,6 +119,7 @@ app.get("/", async (req,res)=>{
     res.render("homepage.ejs",{blogs})
 })
 
+// The "id" is taken from the database
 app.get("/blogRender/:id",async(req,res)=>{
     const id = req.params.id
     const haha = await blogCreateModel.findById(id)
@@ -138,6 +143,7 @@ app.get("/editblog/:id",async(req,res)=>{
     res.render("editBlog.ejs",{blog})  
 })
 
+// For loading images and editing
 app.post('/editblog/:id',upload.single('image'),async(req,res)=>{
     const filename = req.file.filename
     const id = req.params.id

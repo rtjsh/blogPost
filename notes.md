@@ -78,9 +78,24 @@ Multipurpose Internet Mail Extensions --> MIME types play a crucial role in web 
 fetch/get
 
 
-hashing and encryption
+hashing and encryption --> To enhance the security of your application, it's crucial to hash user passwords before storing them in the database. This way, even if your database is compromised, the attackers won't have access to the actual passwords.
+
+#HASHING --> Hashing is a process of converting data (such as a password or a message) into a fixed-size string of characters, which is typically a hash code. The output, known as a hash value or digest, uniquely represents the input data. Hashing is a one-way function, meaning it's designed to be computationally infeasible to reverse the hash back to the original input.
+
+#ENCRYPTION --> Encryption is the process of converting plaintext data into ciphertext, which is an unreadable format, to protect it from unauthorized access. The purpose of encryption is to ensure data confidentiality and security. Only authorized parties, who possess the appropriate decryption key, can convert the ciphertext back into its original plaintext form.
 
 Token, Cookie, Session
+Token --> In JavaScript, a token typically refers to a string that represents an authorization or authentication credential. Tokens are often used in web applications for user authentication and to secure API requests. Common types of tokens include JSON Web Tokens (JWT), OAuth tokens, and CSRF tokens.
 
-JWT
+Cookie --> Web browser cookies are small pieces of data stored on a user's device by websites they visit. They serve various purposes, such as keeping users logged in, remembering preferences, and tracking user behavior for analytics and advertising.
+1) Authentication: Cookies can store session identifiers that keep users logged in across different pages and sessions.
+2) Preferences: They can remember user settings, such as language preference, theme, and other customization options.
+3) Analytics: Websites use cookies to gather data on how users interact with their site, helping them improve functionality and user experience.
+4) Advertising: Advertisers use cookies to track users across different websites, allowing for targeted ads based on browsing behavior.
+
+Session --> In JavaScript, a session typically refers to a period during which a user interacts with an application. Sessions are used to store information about a user's interaction with a web application, allowing the application to remember the user across multiple requests. This is crucial for functionalities such as user authentication, shopping carts, and user preferences.
+
+JWT --> 
 Cryptography
+
+Promisify
