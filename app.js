@@ -3,17 +3,20 @@ const express = require("express")
 const app = express()
 const connectDb = require("./database/databaseConnection") // can take different variablename 
 const registerModel=require("./model/registerModel")
-const bcrypt = require("bcrypt")
+const bcrypt = require("bcrypt") // for encryption of password
 const {multer,storage} = require("./middleware/multerConfig")
 const blogModel = require("./model/blogModel")
-const upload = multer({storage:storage}) // Initialize multer with the defined storage since storage and multer are interconnected
-const jwt = require("jsonwebtoken")
+const upload = multer({storage:storage}) // "multer({ storage: storage })" is a configuration call in the Multer library for Node.js that sets up the middleware "multer" to handle file uploads using the specified storage engine. 
+// Storage Engine Configuration: The storage variable (created using multer.diskStorage) specifies how and where the files should be stored on the disk.
+// Multer Configuration: By passing { storage: storage } to the multer function, you are telling Multer to use this storage engine for handling file uploads.
 
-const cookieParser = require('cookie-parser')
+const jwt = require("jsonwebtoken") // The line const jwt = require("jsonwebtoken") in a Node.js application is used to import the jsonwebtoken library, which is a popular library for creating and verifying JSON Web Tokens (JWTs).
+
+const cookieParser = require('cookie-parser') // The line const cookieParser = require('cookie-parser') in a Node.js application is used to import the cookie-parser middleware. This middleware is essential for handling cookies in Express applications.
+
 app.use(cookieParser())
 
 const Authenticated = require("./middleware/isAuthenticated")
-
 
 
 app.use(express.json()) // Middleware to handle JSON bodies
@@ -23,13 +26,14 @@ app.set("view engine","ejs")
 
 
 app.get("/blog",Authenticated,(req,res)=>{
+    // This setup ensures that only requests with a valid JWT can access the "/blog" route.
     console.log((req.userId));
     res.render("./Blog/blog")
     
 })
 
 
-connectDb()
+
 
 app.post("/blog",upload.single('image'), async (req,res)=>{
 
@@ -148,9 +152,9 @@ app.post("/Login", async(req,res)=>{
         else{
            const token = jwt.sign({userId : user[0]._id},process.env.SECRET,{
                 expiresIn : '20d'
-            })
-            res.cookie("token",token)
-            res.send("Logged in successfully")
+            }) // Generate JWT: The jwt.sign method creates a new JWT token. It encodes the userId into the token and signs it with the SECRET key. The token will expire in 20 days.
+            res.cookie("token",token) // Set Cookie: The res.cookie method sets a cookie named "token" with the value of the JWT token. By default, this cookie will be accessible via JavaScript on the client-side and will be sent with every request to the server.
+            res.send("Logged in successfully") // Sends the information that login was successful
         }
     }
 })
@@ -166,4 +170,4 @@ app.listen(5000, ()=>{
     console.log("Server running")
 })
 
-
+connectDb()
