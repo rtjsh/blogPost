@@ -67,7 +67,7 @@ app.get("/", Authenticated, async (req,res)=>{
 // The "id" is taken from the database
 app.get("/blogRender/:id",async(req,res)=>{
     const id = req.params.id
-    const haha = await blogCreateModel.findById(id)
+    const haha = await blogModel.findById(id)
     console.log(haha);
     res.render("./Blog/blogRender",{haha}) // passing haha variable in "blogRender.ejs"
 })
