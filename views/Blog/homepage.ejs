@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homepage</title>
+    <link rel="stylesheet" href="css/homepage.css"> <!-- No need to give response to the "public" folder as it automatically, searches for CSS in the "public" folder -->
+    
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <%- include("../components/navbar.ejs") %> 
+
+   
+
+    <div class="container">
+
+     <!-- Blogs section -->
+      <%  blogs.forEach((blog)=>{ %>
+            <div class="box">
+                <img src="<%- blog.image%>" alt="Image 1">
+                <div class="box-content">
+                    <h3>
+                        <%-blog.title%>
+                        </h3>
+                    <p>
+                        <%-blog.subtitle%>
+                    </p>
+                    <div class="btn">
+                        <a href="/blogRender/<%-blog._id%>">See more</a>
+                
+                    </div>
+                </div>
+            </div>
+            <%})%>
+    </div>
+    </div>
+
+</body>
+</html>
